@@ -64,7 +64,7 @@ export default function Violations() {
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold border border-amber-500/30">
+            <Button className="bg-gradient-to-l from-blue-700 to-red-700 hover:from-blue-800 hover:to-red-800 text-white font-bold">
               <Plus className="w-4 h-4 ml-2" /> تسجيل مخالفة
             </Button>
           </DialogTrigger>

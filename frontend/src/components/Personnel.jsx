@@ -85,8 +85,8 @@ export default function Personnel() {
                   <tr key={m.id} className="border-b border-stone-100 hover:bg-stone-50">
                     <td className="py-3 px-3">
                       <div className="flex items-center gap-3">
-                        <Avatar className="w-9 h-9 bg-slate-900">
-                          <AvatarFallback className="bg-transparent text-amber-400 text-xs font-black">{initials}</AvatarFallback>
+                        <Avatar className="w-9 h-9 bg-gradient-to-br from-blue-700 to-red-700">
+                          <AvatarFallback className="bg-transparent text-white text-xs font-black">{initials}</AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-bold text-slate-900">{m.name}</p>

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { Home, User, Clock, IdCard, FilePlus, Award, ShieldAlert, Crosshair, Users, Megaphone, Scale, Trophy, BarChart3, LifeBuoy, LogOut, Bell, Search, Shield, Menu, ChevronDown, Settings as SettingsIcon } from 'lucide-react';
+import { Home, User, Clock, IdCard, FilePlus, Award, ShieldAlert, Crosshair, Users, Megaphone, Scale, Trophy, BarChart3, LifeBuoy, LogOut, Bell, Search, Menu, ChevronDown, Settings as SettingsIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { useAuth } from '../App';
 import { mockNotifications } from '../mock';
+
+const LOGO_URL = 'https://customer-assets.emergentagent.com/job_discourse-pro-5/artifacts/hvpwgy6j_photo_5848105849551785356_x.jpg';
 
 const navGroups = [
   {
@@ -44,7 +46,6 @@ const navGroups = [
     ],
   },
 ];
-
 const flatNav = navGroups.flatMap(g => g.items);
 
 export default function Layout() {
@@ -59,22 +60,21 @@ export default function Layout() {
   const pageTitle = flatNav.find(n => n.end ? location.pathname === n.to : location.pathname.startsWith(n.to))?.label || 'الرئيسية';
 
   return (
-    <div className="min-h-screen bg-stone-50 flex">
-      {/* Sidebar */}
+    <div className="min-h-screen bg-slate-50 flex">
       <aside className={`fixed lg:static inset-y-0 right-0 z-40 w-72 transform transition-transform ${sidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}`}>
-        <div className="h-full flex flex-col bg-slate-900 text-slate-200 relative overflow-hidden">
-          {/* Safety stripe */}
-          <div className="absolute top-0 left-0 right-0 h-1 safety-stripe"></div>
-          
+        <div className="h-full flex flex-col bg-gradient-to-b from-blue-900 via-blue-800 to-blue-900 text-blue-50 relative overflow-hidden">
+          {/* Top accent */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-l from-blue-400 via-white to-blue-400"></div>
+
           {/* Logo */}
-          <div className="p-5 border-b border-slate-800 relative">
+          <div className="p-5 border-b border-blue-700/50">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg border border-amber-300">
-                <Shield className="w-7 h-7 text-slate-900" strokeWidth={2.5} />
+              <div className="w-14 h-14 bg-white rounded-xl p-1 shadow-lg border border-blue-300">
+                <img src={LOGO_URL} alt="الشعار" className="w-full h-full object-contain rounded-lg" />
               </div>
               <div>
-                <h2 className="font-black text-white text-base leading-tight">بوابة اللواء حمد</h2>
-                <p className="text-xs text-amber-400 font-bold">الأمنية الإلكترونية</p>
+                <h2 className="font-black text-white text-base leading-tight">فريق أمن</h2>
+                <p className="text-xs text-blue-200 font-bold">ملك الطارة</p>
               </div>
             </div>
           </div>
@@ -83,7 +83,7 @@ export default function Layout() {
           <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto">
             {navGroups.map((group, gi) => (
               <div key={gi}>
-                <p className="text-[10px] font-bold text-amber-500/70 tracking-widest px-3 mb-2 uppercase">{group.label}</p>
+                <p className="text-[10px] font-bold text-blue-300/80 tracking-widest px-3 mb-2 uppercase">{group.label}</p>
                 <div className="space-y-0.5">
                   {group.items.map(item => {
                     const Icon = item.icon;
@@ -96,8 +96,8 @@ export default function Layout() {
                         className={({ isActive }) =>
                           `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                             isActive
-                              ? 'bg-amber-500 text-slate-900 font-bold shadow-md shadow-amber-500/20'
-                              : 'text-slate-300 hover:bg-slate-800 hover:text-amber-400'
+                              ? 'bg-white text-blue-900 font-bold shadow-md'
+                              : 'text-blue-100 hover:bg-blue-700/60 hover:text-white'
                           }`
                         }
                       >
@@ -112,9 +112,9 @@ export default function Layout() {
           </nav>
 
           {/* Quote */}
-          <div className="p-4 border-t border-slate-800">
-            <div className="bg-slate-800/50 rounded-lg p-3 border border-amber-500/10">
-              <p className="text-[11px] text-amber-400 leading-relaxed text-center italic">
+          <div className="p-4 border-t border-blue-700/50">
+            <div className="bg-blue-950/60 rounded-lg p-3 border border-blue-400/20">
+              <p className="text-[11px] text-blue-200 leading-relaxed text-center italic">
                 &laquo; الانضباط أساس القوة،
                 <br />والاحترافية أساس النجاح &raquo;
               </p>
@@ -125,9 +125,8 @@ export default function Layout() {
 
       {sidebarOpen && <div className="fixed inset-0 bg-slate-900/60 z-30 lg:hidden" onClick={() => setSidebarOpen(false)}></div>}
 
-      {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-blue-100 shadow-sm">
           <div className="flex items-center justify-between px-4 md:px-6 h-16 gap-4">
             <div className="flex items-center gap-3">
               <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
@@ -142,7 +141,7 @@ export default function Layout() {
             <div className="flex items-center gap-2">
               <div className="relative hidden md:block">
                 <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <Input placeholder="بحث..." className="pr-10 w-56 h-9 bg-stone-100 border-stone-200" />
+                <Input placeholder="بحث..." className="pr-10 w-56 h-9 bg-blue-50/60 border-blue-200" />
               </div>
 
               <DropdownMenu>
@@ -150,7 +149,7 @@ export default function Layout() {
                   <Button variant="ghost" size="icon" className="relative">
                     <Bell className="w-5 h-5" />
                     {unreadCount > 0 && (
-                      <span className="absolute top-1.5 left-1.5 w-4 h-4 bg-amber-500 text-slate-900 text-[10px] font-bold rounded-full flex items-center justify-center border border-white">{unreadCount}</span>
+                      <span className="absolute top-1.5 left-1.5 w-4 h-4 bg-blue-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-white">{unreadCount}</span>
                     )}
                   </Button>
                 </DropdownMenuTrigger>
@@ -160,7 +159,7 @@ export default function Layout() {
                   {mockNotifications.map(n => (
                     <DropdownMenuItem key={n.id} className="flex-col items-start py-3 cursor-pointer">
                       <div className="flex items-center gap-2 w-full">
-                        {!n.read && <span className="w-2 h-2 bg-amber-500 rounded-full"></span>}
+                        {!n.read && <span className="w-2 h-2 bg-blue-600 rounded-full"></span>}
                         <span className="font-semibold text-sm">{n.title}</span>
                       </div>
                       <p className="text-xs text-slate-500 mt-0.5">{n.message}</p>
@@ -173,8 +172,8 @@ export default function Layout() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-9 px-2 gap-2">
-                    <Avatar className="w-7 h-7 bg-slate-900">
-                      <AvatarFallback className="bg-transparent text-amber-400 text-xs font-black">{initials}</AvatarFallback>
+                    <Avatar className="w-7 h-7 bg-blue-700">
+                      <AvatarFallback className="bg-transparent text-white text-xs font-black">{initials}</AvatarFallback>
                     </Avatar>
                     <ChevronDown className="w-4 h-4 hidden md:block text-slate-500" />
                   </Button>
@@ -185,12 +184,8 @@ export default function Layout() {
                     <div className="text-xs text-slate-500 font-normal">{user?.rank} · {user?.militaryNumber}</div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate('/profile')}>
-                    <User className="w-4 h-4 ml-2" /> ملفي العسكري
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/settings')}>
-                    <SettingsIcon className="w-4 h-4 ml-2" /> الإعدادات
-                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/profile')}><User className="w-4 h-4 ml-2" /> ملفي العسكري</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/settings')}><SettingsIcon className="w-4 h-4 ml-2" /> الإعدادات</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-700 focus:bg-red-50">
                     <LogOut className="w-4 h-4 ml-2" /> تسجيل الخروج

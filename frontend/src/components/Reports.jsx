@@ -31,7 +31,7 @@ export default function Reports() {
           <h2 className="text-2xl font-black text-slate-900">التقارير الأمنية</h2>
           <p className="text-sm text-slate-500">رفع وأرشفة تقارير القطاع</p>
         </div>
-        <Button onClick={() => toast.info('رفع تقرير جديد')} className="bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold border border-amber-500/30">
+        <Button onClick={() => toast.info('رفع تقرير جديد')} className="bg-gradient-to-l from-blue-700 to-red-700 hover:from-blue-800 hover:to-red-800 text-white font-bold">
           <Plus className="w-4 h-4 ml-2" /> رفع تقرير
         </Button>
       </div>
@@ -50,8 +50,8 @@ export default function Reports() {
         {filtered.map(r => (
           <Card key={r.id} className="p-5 border-stone-200 hover:shadow-lg hover:-translate-y-0.5 transition-all">
             <div className="flex items-start justify-between mb-3">
-              <div className="w-11 h-11 bg-slate-900 rounded-xl flex items-center justify-center border border-amber-500/30">
-                <FileText className="w-5 h-5 text-amber-400" />
+              <div className="w-11 h-11 bg-gradient-to-br from-blue-700 to-red-700 rounded-xl flex items-center justify-center">
+                <FileText className="w-5 h-5 text-white" />
               </div>
               <Badge className={statusColors[r.status]}>{r.status}</Badge>
             </div>

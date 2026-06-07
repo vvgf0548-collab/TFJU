@@ -37,8 +37,8 @@ export default function Operations() {
         {filtered.map(op => (
           <Card key={op.id} className="p-5 border-stone-200 hover:shadow-lg hover:border-amber-200 transition-all">
             <div className="flex items-start justify-between mb-3">
-              <div className="w-11 h-11 bg-slate-900 rounded-xl flex items-center justify-center border border-amber-500/30">
-                <Crosshair className="w-5 h-5 text-amber-400" />
+              <div className="w-11 h-11 bg-gradient-to-br from-blue-700 to-red-700 rounded-xl flex items-center justify-center">
+                <Crosshair className="w-5 h-5 text-white" />
               </div>
               <Badge variant="outline" className={statusColors[op.status]}>{op.status}</Badge>
             </div>

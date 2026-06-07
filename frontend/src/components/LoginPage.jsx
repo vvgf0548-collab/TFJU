@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, User, Hash, LogIn, Loader2, Lock } from 'lucide-react';
+import { User, Hash, LogIn, Loader2, Lock } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { toast } from 'sonner';
 import { useAuth } from '../App';
 import { mockUsers } from '../mock';
+
+const LOGO_URL = 'https://customer-assets.emergentagent.com/job_discourse-pro-5/artifacts/hvpwgy6j_photo_5848105849551785356_x.jpg';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -44,59 +46,63 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 camo-bg relative overflow-hidden">
-      {/* Safety stripe top */}
-      <div className="absolute top-0 left-0 right-0 h-2 safety-stripe"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-2 safety-stripe"></div>
-
-      {/* Stars/dots pattern */}
-      <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle, rgba(245,158,11,0.15) 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+    <div className="min-h-screen flex items-center justify-center px-4 naval-bg relative overflow-hidden">
+      <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
+      {/* Red/White/Blue accent stripes */}
+      <div className="absolute top-0 left-0 right-0 flex">
+        <div className="h-1 flex-1 bg-blue-600"></div>
+        <div className="h-1 flex-1 bg-white"></div>
+        <div className="h-1 flex-1 bg-red-600"></div>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 flex">
+        <div className="h-1 flex-1 bg-red-600"></div>
+        <div className="h-1 flex-1 bg-white"></div>
+        <div className="h-1 flex-1 bg-blue-600"></div>
+      </div>
 
       <div className="w-full max-w-md relative animate-fade-in z-10">
-        {/* Header */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center mb-4">
             <div className="relative">
-              <div className="absolute inset-0 bg-amber-400 rounded-2xl blur-2xl opacity-40"></div>
-              <div className="relative w-24 h-24 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 rounded-2xl flex items-center justify-center shadow-2xl border-2 border-amber-300">
-                <Shield className="w-12 h-12 text-slate-900" strokeWidth={2.5} />
+              <div className="absolute inset-0 bg-blue-400/30 rounded-full blur-3xl logo-glow"></div>
+              <div className="relative w-32 h-32 bg-white rounded-2xl p-2 shadow-2xl border-2 border-red-300">
+                <img src={LOGO_URL} alt="فريق أمن ملك الطارة" className="w-full h-full object-contain rounded-xl" />
               </div>
             </div>
           </div>
-          <h1 className="text-2xl md:text-3xl font-black text-white mb-1 tracking-tight">بوابة اللواء حمد</h1>
-          <p className="text-amber-400 font-bold text-base md:text-lg tracking-wide">الأمنية الإلكترونية</p>
+          <h1 className="text-2xl md:text-3xl font-black text-white mb-1 tracking-tight">فريق أمن ملك الطارة</h1>
+          <p className="text-red-200 font-bold text-sm md:text-base tracking-wide">البوابة الإلكترونية الرسمية</p>
           <div className="flex items-center justify-center gap-2 mt-3">
-            <div className="h-px w-12 bg-amber-500/40"></div>
-            <p className="text-xs text-slate-400 font-medium">الانضباط أساس القوة</p>
-            <div className="h-px w-12 bg-amber-500/40"></div>
+            <div className="h-px w-12 bg-red-300/40"></div>
+            <p className="text-xs text-blue-200/80 font-medium">الانضباط أساس القوة</p>
+            <div className="h-px w-12 bg-red-300/40"></div>
           </div>
         </div>
 
-        {/* Card */}
-        <div className="glass-dark rounded-2xl p-7 md:p-8 mil-shadow">
-          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-amber-500/20">
-            <Lock className="w-4 h-4 text-amber-400" />
-            <h2 className="font-bold text-white text-sm tracking-wide">دخول آمن للأعضاء</h2>
+        <div className="bg-white rounded-2xl p-7 md:p-8 mil-shadow border-t-4 border-t-red-600 border-x border-b border-blue-100">
+          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-blue-100">
+            <Lock className="w-4 h-4 text-red-700" />
+            <h2 className="font-bold text-slate-900 text-sm tracking-wide">دخول آمن للأعضاء</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-slate-200 font-semibold text-sm">الاسم الكامل</Label>
+              <Label htmlFor="name" className="text-slate-700 font-semibold text-sm">الاسم الكامل</Label>
               <div className="relative">
                 <User className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="أدخل اسمك الكامل" className="pr-10 h-11 bg-slate-800/60 border-slate-700 text-white placeholder:text-slate-500 focus:border-amber-500 focus:ring-amber-500/20" />
+                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="أدخل اسمك الكامل" className="pr-10 h-11 bg-blue-50/50 border-blue-200 focus:bg-white focus:border-blue-500" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="mil" className="text-slate-200 font-semibold text-sm">الرقم العسكري</Label>
+              <Label htmlFor="mil" className="text-slate-700 font-semibold text-sm">الرقم العسكري</Label>
               <div className="relative">
                 <Hash className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <Input id="mil" value={militaryNumber} onChange={(e) => setMilitaryNumber(e.target.value)} placeholder="أدخل رقمك العسكري" className="pr-10 h-11 bg-slate-800/60 border-slate-700 text-white placeholder:text-slate-500 focus:border-amber-500 focus:ring-amber-500/20" />
+                <Input id="mil" value={militaryNumber} onChange={(e) => setMilitaryNumber(e.target.value)} placeholder="أدخل رقمك العسكري" className="pr-10 h-11 bg-blue-50/50 border-blue-200 focus:bg-white focus:border-blue-500" />
               </div>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full h-12 bg-gradient-to-l from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-900 font-black text-base shadow-lg shadow-amber-500/30 border border-amber-300 transition-all">
+            <Button type="submit" disabled={loading} className="w-full h-12 bg-gradient-to-l from-blue-700 via-blue-700 to-red-700 hover:from-blue-800 hover:to-red-800 text-white font-bold text-base shadow-lg shadow-blue-500/30 transition-all">
               {loading ? (
                 <><Loader2 className="w-4 h-4 ml-2 animate-spin" /> جاري التحقق...</>
               ) : (
@@ -105,15 +111,15 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-amber-500/20">
-            <p className="text-[11px] text-slate-400 text-center leading-relaxed">
-              تلميح: الرقم <span className="font-mono font-bold text-amber-400">12345</span> لدخول كمسؤول، أو <span className="font-mono font-bold text-amber-400">00000</span> لتسجيل مسؤول جديد
+          <div className="mt-6 pt-5 border-t border-blue-100">
+            <p className="text-[11px] text-slate-500 text-center leading-relaxed">
+              تلميح: الرقم <span className="font-mono font-bold text-blue-700">12345</span> لدخول كمسؤول، أو <span className="font-mono font-bold text-red-700">00000</span> لتسجيل مسؤول جديد
             </p>
           </div>
         </div>
 
         <div className="text-center mt-6">
-          <p className="text-xs text-slate-500 font-medium tracking-wider">&laquo; الاحترافية أساس النجاح &raquo;</p>
+          <p className="text-xs text-blue-200/80 font-medium tracking-wider">&laquo; الاحترافية أساس النجاح &raquo;</p>
         </div>
       </div>
     </div>

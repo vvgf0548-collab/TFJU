@@ -11,37 +11,37 @@ body {
     font-family: 'Tajawal', 'Cairo', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #F7F5EF;
+    background: #F1F5F9;
 }
 
 code { font-family: source-code-pro, Menlo, Monaco, monospace; }
 
 @layer base {
     :root {
-        --background: 42 26% 96%;
-        --foreground: 215 28% 17%;
+        --background: 210 40% 98%;
+        --foreground: 217 33% 17%;
         --card: 0 0% 100%;
-        --card-foreground: 215 28% 17%;
+        --card-foreground: 217 33% 17%;
         --popover: 0 0% 100%;
-        --popover-foreground: 215 28% 17%;
-        --primary: 215 28% 17%;
-        --primary-foreground: 48 100% 96%;
-        --secondary: 42 26% 92%;
-        --secondary-foreground: 215 28% 17%;
-        --muted: 42 20% 94%;
+        --popover-foreground: 217 33% 17%;
+        --primary: 217 91% 35%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 210 40% 96%;
+        --secondary-foreground: 217 33% 17%;
+        --muted: 210 40% 96%;
         --muted-foreground: 215 16% 47%;
-        --accent: 38 92% 50%;
-        --accent-foreground: 215 28% 17%;
+        --accent: 0 84% 50%;
+        --accent-foreground: 0 0% 100%;
         --destructive: 0 72% 51%;
         --destructive-foreground: 0 0% 98%;
-        --border: 42 20% 88%;
-        --input: 42 20% 88%;
-        --ring: 38 92% 50%;
-        --chart-1: 38 92% 50%;
-        --chart-2: 215 28% 25%;
-        --chart-3: 50 80% 50%;
-        --chart-4: 200 30% 35%;
-        --chart-5: 80 30% 40%;
+        --border: 214 32% 91%;
+        --input: 214 32% 91%;
+        --ring: 217 91% 60%;
+        --chart-1: 217 91% 60%;
+        --chart-2: 0 84% 55%;
+        --chart-3: 217 91% 35%;
+        --chart-4: 0 72% 45%;
+        --chart-5: 199 89% 48%;
         --radius: 0.625rem;
     }
 }
@@ -52,49 +52,68 @@ code { font-family: source-code-pro, Menlo, Monaco, monospace; }
 }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #e8e3d4; }
+::-webkit-scrollbar-track { background: #e2e8f0; }
 ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #475569; }
+::-webkit-scrollbar-thumb:hover { background: #1e40af; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .animate-fade-in { animation: fadeIn 0.4s ease-out; }
 
-@keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 50% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); } }
+@keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5); } 50% { box-shadow: 0 0 0 12px rgba(220, 38, 38, 0); } }
 .pulse-glow { animation: pulseGlow 2s infinite; }
 
 .mil-pattern {
-    background-color: #F7F5EF;
+    background-color: #F8FAFC;
     background-image: 
-        linear-gradient(135deg, rgba(31, 41, 55, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 20% 30%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(31, 41, 55, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(220, 38, 38, 0.08) 0%, transparent 50%);
 }
 
-.camo-bg {
+.naval-bg {
     background: 
-        radial-gradient(ellipse at top right, rgba(245, 158, 11, 0.15), transparent 50%),
-        radial-gradient(ellipse at bottom left, rgba(120, 113, 86, 0.2), transparent 50%),
-        linear-gradient(135deg, #1f2937 0%, #111827 50%, #1f2937 100%);
+        radial-gradient(ellipse at top right, rgba(220, 38, 38, 0.25), transparent 50%),
+        radial-gradient(ellipse at bottom left, rgba(30, 58, 138, 0.45), transparent 50%),
+        linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #991b1b 100%);
 }
 
-.safety-stripe {
-    background: repeating-linear-gradient(
-        45deg,
-        #1f2937,
-        #1f2937 10px,
-        #f59e0b 10px,
-        #f59e0b 20px
+.naval-light {
+    background: linear-gradient(135deg, #dbeafe 0%, #fef2f2 50%, #ffffff 100%);
+}
+
+.flag-stripe {
+    background: linear-gradient(90deg,
+        #dc2626 0%, #dc2626 33%,
+        #ffffff 33%, #ffffff 66%,
+        #1e40af 66%, #1e40af 100%
     );
 }
 
-.glass-dark {
-    background: rgba(31, 41, 55, 0.85);
+.glass-blue {
+    background: rgba(30, 58, 138, 0.88);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.stat-card-shadow { box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(15, 23, 42, 0.08); }
-.mil-shadow { box-shadow: 0 4px 24px rgba(31, 41, 55, 0.25); }
+.stat-card-shadow { box-shadow: 0 1px 3px rgba(30, 58, 138, 0.06), 0 4px 16px rgba(30, 58, 138, 0.08); }
+.mil-shadow { box-shadow: 0 4px 28px rgba(30, 58, 138, 0.25); }
 
 .text-balance { text-wrap: balance; }
+.logo-glow { filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.3)); }
+
+/* Backward compatibility aliases */
+.camo-bg { 
+    background: 
+        radial-gradient(ellipse at top right, rgba(220, 38, 38, 0.25), transparent 50%),
+        radial-gradient(ellipse at bottom left, rgba(30, 58, 138, 0.45), transparent 50%),
+        linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #991b1b 100%);
+}
+.safety-stripe {
+    background: linear-gradient(90deg, #1e40af 0%, #1e40af 33%, #ffffff 33%, #ffffff 66%, #dc2626 66%, #dc2626 100%);
+}
+.glass-dark {
+    background: rgba(30, 58, 138, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}

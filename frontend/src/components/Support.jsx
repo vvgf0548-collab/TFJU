@@ -72,7 +72,7 @@ export default function Support() {
                 <Textarea rows={6} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="اشرح بالتفصيل..." />
               </div>
               <div className="flex justify-end">
-                <Button onClick={() => submit(tab.label)} className="bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold border border-amber-500/30">
+                <Button onClick={() => submit(tab.label)} className="bg-gradient-to-l from-blue-700 to-red-700 hover:from-blue-800 hover:to-red-800 text-white font-bold">
                   <Send className="w-4 h-4 ml-2" /> إرسال
                 </Button>
               </div>
