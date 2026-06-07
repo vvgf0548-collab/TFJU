@@ -48,15 +48,13 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 naval-bg relative overflow-hidden">
       <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-      {/* Red/White/Blue accent stripes */}
+      {/* Red & Blue accent stripes */}
       <div className="absolute top-0 left-0 right-0 flex">
         <div className="h-1 flex-1 bg-blue-600"></div>
-        <div className="h-1 flex-1 bg-white"></div>
         <div className="h-1 flex-1 bg-red-600"></div>
       </div>
       <div className="absolute bottom-0 left-0 right-0 flex">
         <div className="h-1 flex-1 bg-red-600"></div>
-        <div className="h-1 flex-1 bg-white"></div>
         <div className="h-1 flex-1 bg-blue-600"></div>
       </div>
 
@@ -65,7 +63,7 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center mb-4">
             <div className="relative">
               <div className="absolute inset-0 bg-blue-400/30 rounded-full blur-3xl logo-glow"></div>
-              <div className="relative w-32 h-32 bg-white rounded-2xl p-2 shadow-2xl border-2 border-red-300">
+              <div className="relative w-32 h-32 bg-gradient-to-br from-blue-700 to-red-700 rounded-2xl p-2 shadow-2xl border-2 border-red-400">
                 <img src={LOGO_URL} alt="فريق أمن ملك الطارة" className="w-full h-full object-contain rounded-xl" />
               </div>
             </div>
@@ -79,30 +77,30 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-7 md:p-8 mil-shadow border-t-4 border-t-red-600 border-x border-b border-blue-100">
-          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-blue-100">
-            <Lock className="w-4 h-4 text-red-700" />
-            <h2 className="font-bold text-slate-900 text-sm tracking-wide">دخول آمن للأعضاء</h2>
+        <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-red-900 rounded-2xl p-7 md:p-8 mil-shadow border-t-4 border-t-red-500 border-x border-b border-blue-700">
+          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-blue-700/50">
+            <Lock className="w-4 h-4 text-red-300" />
+            <h2 className="font-bold text-white text-sm tracking-wide">دخول آمن للأعضاء</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-slate-700 font-semibold text-sm">الاسم الكامل</Label>
+              <Label htmlFor="name" className="text-blue-100 font-semibold text-sm">الاسم الكامل</Label>
               <div className="relative">
-                <User className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="أدخل اسمك الكامل" className="pr-10 h-11 bg-blue-50/50 border-blue-200 focus:bg-white focus:border-blue-500" />
+                <User className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
+                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="أدخل اسمك الكامل" className="pr-10 h-11 bg-blue-950/60 border-blue-600 text-white placeholder:text-blue-300/60 focus:border-red-400 focus:bg-blue-950" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="mil" className="text-slate-700 font-semibold text-sm">الرقم العسكري</Label>
+              <Label htmlFor="mil" className="text-blue-100 font-semibold text-sm">الرقم العسكري</Label>
               <div className="relative">
-                <Hash className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <Input id="mil" value={militaryNumber} onChange={(e) => setMilitaryNumber(e.target.value)} placeholder="أدخل رقمك العسكري" className="pr-10 h-11 bg-blue-50/50 border-blue-200 focus:bg-white focus:border-blue-500" />
+                <Hash className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
+                <Input id="mil" value={militaryNumber} onChange={(e) => setMilitaryNumber(e.target.value)} placeholder="أدخل رقمك العسكري" className="pr-10 h-11 bg-blue-950/60 border-blue-600 text-white placeholder:text-blue-300/60 focus:border-red-400 focus:bg-blue-950" />
               </div>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full h-12 bg-gradient-to-l from-blue-700 via-blue-700 to-red-700 hover:from-blue-800 hover:to-red-800 text-white font-bold text-base shadow-lg shadow-blue-500/30 transition-all">
+            <Button type="submit" disabled={loading} className="w-full h-12 bg-gradient-to-l from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold text-base shadow-lg shadow-red-500/30 border border-red-400/50 transition-all">
               {loading ? (
                 <><Loader2 className="w-4 h-4 ml-2 animate-spin" /> جاري التحقق...</>
               ) : (
@@ -111,9 +109,9 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-blue-100">
-            <p className="text-[11px] text-slate-500 text-center leading-relaxed">
-              تلميح: الرقم <span className="font-mono font-bold text-blue-700">12345</span> لدخول كمسؤول، أو <span className="font-mono font-bold text-red-700">00000</span> لتسجيل مسؤول جديد
+          <div className="mt-6 pt-5 border-t border-blue-700/50">
+            <p className="text-[11px] text-blue-200 text-center leading-relaxed">
+              تلميح: الرقم <span className="font-mono font-bold text-red-300">12345</span> لدخول كمسؤول، أو <span className="font-mono font-bold text-red-300">00000</span> لتسجيل مسؤول جديد
             </p>
           </div>
         </div>
