@@ -101,3 +101,224 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: |
+  بناء بوابة "فريق أمن ملك الطارة" الإلكترونية - منصة عسكرية/أمنية بألوان أحمر وأزرق.
+  Backend with JWT auth, smart login (register if new with pending status), admin approval (12345 admin, 00000 new admin shortcut),
+  MongoDB collections for: users, announcements, violations, requests, reports, operations, attendance, promotions, medals, support_tickets.
+  All endpoints under /api prefix.
+
+backend:
+  - task: "Auth - smart login & JWT"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "POST /api/auth/login accepts {name, militaryNumber}. If user exists, login. Otherwise create new (status=pending). militaryNumber=00000 creates admin. Returns access_token. Also seeded admin with militaryNumber=12345."
+        - working: true
+          agent: "testing"
+          comment: "✅ All auth tests passed (6/6): Login with existing admin (12345) returns token with role=admin, status=active. Login with new militaryNumber (99999) creates pending user with status=pending, role=officer. Login with 00000 creates instant admin with role=admin, status=active. Missing fields correctly returns 422. All JWT token generation and validation working correctly."
+  - task: "GET /api/auth/me with Bearer token"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Returns current user from JWT."
+        - working: true
+          agent: "testing"
+          comment: "✅ GET /api/auth/me working correctly: With valid Bearer token returns user object with correct data. Without token correctly returns 401 Unauthorized."
+  - task: "Users management & admin approval"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "GET /api/users, /api/users/pending. POST /api/users/{id}/approve|reject (admin only)."
+        - working: true
+          agent: "testing"
+          comment: "✅ All users management tests passed (4/4): GET /api/users returns list of all users (12 users). GET /api/users/pending returns only pending users (1 pending). POST /api/users/{id}/approve successfully approves pending user. Non-admin attempting to approve correctly returns 403 Forbidden."
+  - task: "Announcements CRUD"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "GET list, POST create (admin only)."
+        - working: true
+          agent: "testing"
+          comment: "✅ Announcements endpoints working (tested via seeded data). GET /api/announcements returns list. POST /api/announcements creates new announcement (admin only)."
+  - task: "Violations CRUD"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "GET, POST (any active user), PATCH status."
+        - working: true
+          agent: "testing"
+          comment: "✅ All violations tests passed (3/3): GET /api/violations returns list (2 violations). POST /api/violations creates new violation with status=مفتوحة. PATCH /api/violations/{vid} successfully updates status to مغلقة."
+  - task: "Requests (leave, promotion, etc.)"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "GET (own for user, all for admin), POST, PATCH (admin approve/reject)."
+        - working: true
+          agent: "testing"
+          comment: "✅ All requests tests passed (4/4): GET /api/requests as user returns own requests only. GET /api/requests as admin returns all requests. POST /api/requests creates request with status=قيد المراجعة. PATCH /api/requests/{rid} as admin successfully updates status to موافق."
+  - task: "Reports CRUD"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "GET, POST."
+        - working: true
+          agent: "testing"
+          comment: "✅ All reports tests passed (2/2): GET /api/reports returns list (2 reports). POST /api/reports creates new report with auto-generated id and date."
+  - task: "Operations CRUD"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "GET, POST (admin)."
+        - working: true
+          agent: "testing"
+          comment: "✅ All operations tests passed (2/2): GET /api/operations returns list (3 operations). POST /api/operations as admin creates new operation with all required fields."
+  - task: "Attendance check-in/out + history"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "POST /attendance/checkin, /checkout. GET /today, /history aggregated 7 days."
+        - working: true
+          agent: "testing"
+          comment: "✅ All attendance tests passed (5/5): POST /api/attendance/checkin records checkin with timestamp. Duplicate checkin correctly returns ok=false with message 'تم تسجيل الحضور سابقاً'. POST /api/attendance/checkout records checkout. GET /api/attendance/today returns mine object with today's attendance. GET /api/attendance/history returns aggregated 7-day history."
+  - task: "Stats dashboard"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "GET /stats/dashboard returns aggregated counts."
+        - working: true
+          agent: "testing"
+          comment: "✅ Stats dashboard test passed: GET /api/stats/dashboard returns all required fields (totalMembers, presentToday, activeOperations, pendingRequests, totalReports, activeViolations, pendingUsers, complianceRate, monthlyChange)."
+  - task: "Promotions, Medals, Support ticket"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "low"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "GET promotions, medals. POST support/ticket."
+        - working: true
+          agent: "testing"
+          comment: "✅ All low-priority tests passed (3/3): GET /api/promotions returns list (3 promotions). GET /api/medals returns list (2 medals). POST /api/support/ticket creates support ticket with all required fields."
+
+frontend:
+  - task: "Login + Pending approval flow"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/components/LoginPage.jsx, PendingApproval.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Hooked to /api/auth/login. Stores token. Pending users redirected to /pending which polls /me."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 2
+  run_ui: false
+
+test_plan:
+  current_focus: []
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+    - agent: "main"
+      message: |
+        Backend ready with JWT auth, MongoDB models for all sections, seeded admin (militaryNumber=12345, name=أحمد محمد العتيبي).
+        Special: militaryNumber=00000 instantly creates new admin. Any other militaryNumber creates pending user awaiting admin approval.
+        Please test: 1) Login with existing admin (12345). 2) Login with new militaryNumber (e.g. 99999) → expect pending status. 3) Admin approves pending user.
+        4) CRUD on violations, requests, reports, operations, announcements. 5) Attendance checkin/checkout/today/history. 6) /stats/dashboard.
+    - agent: "testing"
+      message: |
+        ✅ BACKEND TESTING COMPLETE - ALL TESTS PASSED (30/30 - 100% SUCCESS RATE)
+        
+        Comprehensive testing completed on all backend endpoints at https://discourse-pro-5.preview.emergentagent.com/api
+        
+        HIGH PRIORITY (All Working):
+        - Auth smart login & JWT: All scenarios tested (existing admin, new user → pending, instant admin with 00000, missing fields validation)
+        - GET /api/auth/me: Token validation working correctly (with/without token)
+        - Users management: List users, pending users, approve/reject with proper admin authorization
+        
+        MEDIUM PRIORITY (All Working):
+        - Announcements: GET/POST working
+        - Violations: Full CRUD tested (GET, POST, PATCH status)
+        - Requests: User sees own, admin sees all, create and approve working
+        - Reports: GET/POST working
+        - Operations: GET/POST working (admin only)
+        - Attendance: Checkin/checkout with duplicate prevention, today's record, 7-day history
+        - Stats dashboard: All 9 fields returned correctly
+        
+        LOW PRIORITY (All Working):
+        - Promotions: GET returns seeded data (3 items)
+        - Medals: GET returns seeded data (2 items)
+        - Support tickets: POST creates ticket successfully
+        
+        All endpoints properly secured with JWT Bearer token authentication. Role-based access control (admin vs officer) working correctly. Smart login logic functioning as designed (00000 → instant admin, new numbers → pending status). No critical issues found.

@@ -6,7 +6,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { toast } from 'sonner';
 import { useAuth } from '../App';
-import { mockUsers } from '../mock';
+import api from '../api';
 
 const LOGO_URL = 'https://customer-assets.emergentagent.com/job_discourse-pro-5/artifacts/hvpwgy6j_photo_5848105849551785356_x.jpg';
 
@@ -17,32 +17,29 @@ export default function LoginPage() {
   const [militaryNumber, setMilitaryNumber] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim() || !militaryNumber.trim()) {
       toast.error('الرجاء إدخال جميع البيانات');
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      const existing = mockUsers.find(u => u.militaryNumber === militaryNumber.trim());
-      if (existing) {
-        login(existing);
-        toast.success(`أهلاً ${existing.rank} ${existing.name}`);
-        navigate('/');
-      } else if (militaryNumber.trim() === '00000') {
-        const newAdmin = { id: 'admin-' + Date.now(), name: name.trim(), militaryNumber: '00000', role: 'admin', status: 'active', rank: 'عقيد', department: 'الإدارة العامة', joinDate: '2025-07-08', serviceYears: 0 };
-        login(newAdmin);
-        toast.success('تم تسجيل الدخول كمسؤول');
-        navigate('/');
-      } else {
-        const newUser = { id: 'u-' + Date.now(), name: name.trim(), militaryNumber: militaryNumber.trim(), role: 'officer', status: 'pending', rank: 'ملازم', department: 'غير محدد', joinDate: '2025-07-08', serviceYears: 0 };
-        login(newUser);
+    try {
+      const res = await api.post('/auth/login', { name: name.trim(), militaryNumber: militaryNumber.trim() });
+      const { access_token, user } = res.data;
+      login(user, access_token);
+      if (user.status === 'pending') {
         toast.info('تم استلام طلبك، بانتظار موافقة القيادة');
         navigate('/pending');
+      } else {
+        toast.success(`أهلاً ${user.rank} ${user.name}`);
+        navigate('/');
       }
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'فشل الدخول');
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   };
 
   return (

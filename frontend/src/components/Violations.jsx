@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus, AlertTriangle, Search, CheckCircle, Clock as ClockIcon, Scale } from 'lucide-react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -9,8 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { mockViolations, mockMembers } from '../mock';
 import { toast } from 'sonner';
+import api from '../api';
 
 const severityColors = {
   'عالية': 'bg-red-100 text-red-700 border-red-200',
@@ -24,29 +24,45 @@ const statusColors = {
 };
 
 export default function Violations() {
-  const [violations, setViolations] = useState(mockViolations);
+  const [violations, setViolations] = useState([]);
+  const [members, setMembers] = useState([]);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ soldierId: '', type: '', severity: 'متوسطة', description: '' });
 
+  const load = async () => {
+    try {
+      const [v, u] = await Promise.all([api.get('/violations'), api.get('/users')]);
+      setViolations(v.data);
+      setMembers(u.data.filter(x => x.role !== 'admin'));
+    } catch (e) {}
+  };
+  useEffect(() => { load(); }, []);
+
   const filtered = violations.filter(v => {
     if (filter !== 'all' && v.status !== filter) return false;
-    if (search && !v.soldierName.includes(search) && !v.type.includes(search)) return false;
+    if (search && !v.soldierName?.includes(search) && !v.type?.includes(search)) return false;
     return true;
   });
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!form.soldierId || !form.type) { toast.error('أكمل جميع الحقول'); return; }
-    const soldier = mockMembers.find(s => s.id === form.soldierId);
-    setViolations([{ id: 'v' + Date.now(), soldierName: soldier.name, militaryNumber: soldier.militaryNumber, type: form.type, severity: form.severity, date: new Date().toISOString().split('T')[0], status: 'مفتوحة', description: form.description }, ...violations]);
-    setOpen(false);
-    setForm({ soldierId: '', type: '', severity: 'متوسطة', description: '' });
-    toast.success('تم تسجيل المخالفة');
+    try {
+      await api.post('/violations', form);
+      toast.success('تم تسجيل المخالفة');
+      setOpen(false);
+      setForm({ soldierId: '', type: '', severity: 'متوسطة', description: '' });
+      load();
+    } catch (e) { toast.error(e.response?.data?.detail || 'فشل'); }
   };
-  const updateStatus = (id, status) => {
-    setViolations(violations.map(v => v.id === id ? { ...v, status } : v));
-    toast.success(`تم التحديث إلى ${status}`);
+
+  const updateStatus = async (id, status) => {
+    try {
+      await api.patch(`/violations/${id}`, { status });
+      toast.success(`تم التحديث إلى ${status}`);
+      load();
+    } catch (e) { toast.error('فشل'); }
   };
 
   const counts = {
@@ -64,9 +80,7 @@ export default function Violations() {
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-gradient-to-l from-blue-700 to-red-700 hover:from-blue-800 hover:to-red-800 text-white font-bold">
-              <Plus className="w-4 h-4 ml-2" /> تسجيل مخالفة
-            </Button>
+            <Button className="bg-gradient-to-l from-blue-700 to-red-700 hover:from-blue-800 hover:to-red-800 text-white font-bold"><Plus className="w-4 h-4 ml-2" /> تسجيل مخالفة</Button>
           </DialogTrigger>
           <DialogContent className="max-w-md" dir="rtl">
             <DialogHeader><DialogTitle>تسجيل مخالفة جديدة</DialogTitle></DialogHeader>
@@ -75,7 +89,7 @@ export default function Violations() {
                 <Label>العضو</Label>
                 <Select value={form.soldierId} onValueChange={v => setForm({ ...form, soldierId: v })}>
                   <SelectTrigger><SelectValue placeholder="اختر العضو" /></SelectTrigger>
-                  <SelectContent>{mockMembers.map(s => <SelectItem key={s.id} value={s.id}>{s.name} — {s.militaryNumber}</SelectItem>)}</SelectContent>
+                  <SelectContent>{members.map(s => <SelectItem key={s.id} value={s.id}>{s.name} — {s.militaryNumber}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
               <div className="space-y-2"><Label>نوع المخالفة</Label><Input value={form.type} onChange={e => setForm({ ...form, type: e.target.value })} /></div>
@@ -94,35 +108,23 @@ export default function Violations() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setOpen(false)}>إلغاء</Button>
-              <Button onClick={handleAdd} className="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold">حفظ</Button>
+              <Button onClick={handleAdd} className="bg-gradient-to-l from-blue-700 to-red-700 text-white">حفظ</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
 
       <div className="grid grid-cols-3 gap-3 md:gap-4">
-        <Card className="p-4 border-blue-100 bg-blue-50/50">
-          <div className="flex items-center gap-2 mb-1"><ClockIcon className="w-4 h-4 text-blue-600" /><p className="text-xs text-blue-700 font-bold">مفتوحة</p></div>
-          <p className="text-2xl font-black text-blue-900">{counts.open}</p>
-        </Card>
-        <Card className="p-4 border-amber-100 bg-amber-50/50">
-          <div className="flex items-center gap-2 mb-1"><AlertTriangle className="w-4 h-4 text-amber-600" /><p className="text-xs text-amber-700 font-bold">قيد المراجعة</p></div>
-          <p className="text-2xl font-black text-amber-900">{counts.review}</p>
-        </Card>
-        <Card className="p-4 border-emerald-100 bg-emerald-50/50">
-          <div className="flex items-center gap-2 mb-1"><CheckCircle className="w-4 h-4 text-emerald-600" /><p className="text-xs text-emerald-700 font-bold">مغلقة</p></div>
-          <p className="text-2xl font-black text-emerald-900">{counts.closed}</p>
-        </Card>
+        <Card className="p-4 border-blue-100 bg-blue-50/50"><div className="flex items-center gap-2 mb-1"><ClockIcon className="w-4 h-4 text-blue-600" /><p className="text-xs text-blue-700 font-bold">مفتوحة</p></div><p className="text-2xl font-black text-blue-900">{counts.open}</p></Card>
+        <Card className="p-4 border-amber-100 bg-amber-50/50"><div className="flex items-center gap-2 mb-1"><AlertTriangle className="w-4 h-4 text-amber-600" /><p className="text-xs text-amber-700 font-bold">قيد المراجعة</p></div><p className="text-2xl font-black text-amber-900">{counts.review}</p></Card>
+        <Card className="p-4 border-emerald-100 bg-emerald-50/50"><div className="flex items-center gap-2 mb-1"><CheckCircle className="w-4 h-4 text-emerald-600" /><p className="text-xs text-emerald-700 font-bold">مغلقة</p></div><p className="text-2xl font-black text-emerald-900">{counts.closed}</p></Card>
       </div>
 
-      <Card className="p-4 md:p-6 border-stone-200">
+      <Card className="p-4 md:p-6 border-blue-100">
         <div className="flex flex-col md:flex-row gap-3 mb-5">
-          <div className="relative flex-1">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="بحث..." className="pr-10 bg-stone-50" />
-          </div>
+          <div className="relative flex-1"><Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><Input value={search} onChange={e => setSearch(e.target.value)} placeholder="بحث..." className="pr-10 bg-blue-50/50" /></div>
           <Tabs value={filter} onValueChange={setFilter}>
-            <TabsList className="bg-stone-100">
+            <TabsList className="bg-blue-50">
               <TabsTrigger value="all">الكل</TabsTrigger>
               <TabsTrigger value="مفتوحة">مفتوحة</TabsTrigger>
               <TabsTrigger value="قيد المراجعة">مراجعة</TabsTrigger>
@@ -133,10 +135,8 @@ export default function Violations() {
 
         <div className="space-y-3">
           {filtered.map(v => (
-            <div key={v.id} className="flex flex-col md:flex-row md:items-center gap-4 p-4 border border-stone-100 rounded-lg hover:border-amber-200 hover:bg-amber-50/20 transition-all">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${v.severity === 'عالية' ? 'bg-red-100' : v.severity === 'متوسطة' ? 'bg-amber-100' : 'bg-stone-100'}`}>
-                <Scale className={`w-5 h-5 ${v.severity === 'عالية' ? 'text-red-600' : v.severity === 'متوسطة' ? 'text-amber-600' : 'text-slate-600'}`} />
-              </div>
+            <div key={v.id} className="flex flex-col md:flex-row md:items-center gap-4 p-4 border border-blue-50 rounded-lg hover:border-red-200 hover:bg-red-50/20 transition-all">
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${v.severity === 'عالية' ? 'bg-red-100' : v.severity === 'متوسطة' ? 'bg-amber-100' : 'bg-slate-100'}`}><Scale className={`w-5 h-5 ${v.severity === 'عالية' ? 'text-red-600' : v.severity === 'متوسطة' ? 'text-amber-600' : 'text-slate-600'}`} /></div>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
                   <h4 className="font-bold text-slate-900">{v.type}</h4>
@@ -153,6 +153,7 @@ export default function Violations() {
               </div>
             </div>
           ))}
+          {filtered.length === 0 && <p className="text-center py-8 text-slate-400">لا توجد مخالفات</p>}
         </div>
       </Card>
     </div>

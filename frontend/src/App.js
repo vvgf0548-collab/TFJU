@@ -20,6 +20,7 @@ import Statistics from './components/Statistics';
 import Support from './components/Support';
 import Settings from './components/Settings';
 import { Toaster } from './components/ui/sonner';
+import api from './api';
 
 export const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
@@ -29,22 +30,41 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('mil_user');
-    if (stored) {
-      try { setUser(JSON.parse(stored)); } catch (e) { localStorage.removeItem('mil_user'); }
-    }
-    setLoading(false);
+    const token = localStorage.getItem('mil_token');
+    if (!token) { setLoading(false); return; }
+    api.get('/auth/me')
+      .then(r => { setUser(r.data); localStorage.setItem('mil_user', JSON.stringify(r.data)); })
+      .catch(() => {
+        localStorage.removeItem('mil_token');
+        localStorage.removeItem('mil_user');
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const login = (u) => { setUser(u); localStorage.setItem('mil_user', JSON.stringify(u)); };
-  const logout = () => { setUser(null); localStorage.removeItem('mil_user'); };
+  const login = (u, token) => {
+    setUser(u);
+    localStorage.setItem('mil_user', JSON.stringify(u));
+    if (token) localStorage.setItem('mil_token', token);
+  };
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('mil_user');
+    localStorage.removeItem('mil_token');
+  };
+  const refresh = async () => {
+    try {
+      const r = await api.get('/auth/me');
+      setUser(r.data);
+      localStorage.setItem('mil_user', JSON.stringify(r.data));
+    } catch {}
+  };
 
-  return <AuthContext.Provider value={{ user, login, logout, loading }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, login, logout, loading, refresh }}>{children}</AuthContext.Provider>;
 }
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-amber-500"></div></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-600"></div></div>;
   if (!user) return <Navigate to="/login" replace />;
   if (user.status === 'pending') return <Navigate to="/pending" replace />;
   return children;

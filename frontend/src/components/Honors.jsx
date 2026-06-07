@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Trophy, Star, Award, Crown, Medal } from 'lucide-react';
-import { mockHonors } from '../mock';
+import api from '../api';
 
 export default function Honors() {
+  const [users, setUsers] = useState([]);
+  const [promotions, setPromotions] = useState([]);
+
+  useEffect(() => {
+    Promise.all([
+      api.get('/users').then(r => setUsers(r.data)).catch(() => {}),
+      api.get('/promotions').then(r => setPromotions(r.data)).catch(() => {}),
+    ]);
+  }, []);
+
+  const bestMember = users[0] || { name: 'غير محدد', rank: '-' };
+  const bestOfficer = users.find(u => ['رائد', 'عقيد', 'نقيب'].includes(u.rank)) || bestMember;
+
   return (
     <div className="space-y-6">
       <div>
@@ -13,59 +26,50 @@ export default function Honors() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="p-6 border-amber-200 bg-gradient-to-br from-amber-50 via-yellow-50 to-amber-100 relative overflow-hidden">
-          <div className="absolute top-3 left-3 opacity-10"><Crown className="w-24 h-24 text-amber-700" /></div>
-          <Badge className="bg-amber-600 text-white font-bold mb-3">أفضل فرد</Badge>
+        <Card className="p-6 border-red-200 bg-gradient-to-br from-red-50 via-blue-50 to-red-100 relative overflow-hidden">
+          <div className="absolute top-3 left-3 opacity-10"><Crown className="w-24 h-24 text-red-700" /></div>
+          <Badge className="bg-red-600 text-white font-bold mb-3">أفضل فرد</Badge>
           <div className="flex justify-center my-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-4 border-amber-300 shadow-lg">
-              <Crown className="w-10 h-10 text-slate-900" />
-            </div>
+            <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-blue-700 rounded-full flex items-center justify-center shadow-lg"><Crown className="w-10 h-10 text-white" /></div>
           </div>
-          <p className="text-center font-black text-slate-900 text-lg">{mockHonors.bestMember.name}</p>
-          <p className="text-center text-sm text-amber-800 font-bold">{mockHonors.bestMember.rank}</p>
-          <p className="text-center text-xs text-slate-600 mt-2">{mockHonors.bestMember.reason}</p>
+          <p className="text-center font-black text-slate-900 text-lg">{bestMember.name}</p>
+          <p className="text-center text-sm text-red-800 font-bold">{bestMember.rank}</p>
+          <p className="text-center text-xs text-slate-600 mt-2">تميز في أداء الواجب</p>
         </Card>
 
-        <Card className="p-6 border-stone-200 bg-gradient-to-br from-slate-50 to-stone-100 relative overflow-hidden">
-          <div className="absolute top-3 left-3 opacity-10"><Star className="w-24 h-24 text-slate-700" /></div>
-          <Badge className="bg-slate-700 text-white font-bold mb-3">أفضل ضابط</Badge>
+        <Card className="p-6 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 relative overflow-hidden">
+          <div className="absolute top-3 left-3 opacity-10"><Star className="w-24 h-24 text-blue-700" /></div>
+          <Badge className="bg-blue-700 text-white font-bold mb-3">أفضل ضابط</Badge>
           <div className="flex justify-center my-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-slate-700 to-slate-900 rounded-full flex items-center justify-center border-4 border-slate-300 shadow-lg">
-              <Star className="w-10 h-10 text-amber-400" />
-            </div>
+            <div className="w-20 h-20 bg-gradient-to-br from-blue-700 to-blue-900 rounded-full flex items-center justify-center shadow-lg"><Star className="w-10 h-10 text-white" /></div>
           </div>
-          <p className="text-center font-black text-slate-900 text-lg">{mockHonors.bestOfficer.name}</p>
-          <p className="text-center text-sm text-slate-600 font-bold">{mockHonors.bestOfficer.rank}</p>
-          <p className="text-center text-xs text-slate-600 mt-2">{mockHonors.bestOfficer.reason}</p>
+          <p className="text-center font-black text-slate-900 text-lg">{bestOfficer.name}</p>
+          <p className="text-center text-sm text-blue-700 font-bold">{bestOfficer.rank}</p>
+          <p className="text-center text-xs text-slate-600 mt-2">قيادة عمليات ناجحة</p>
         </Card>
 
-        <Card className="p-6 border-stone-200 bg-gradient-to-br from-orange-50 to-amber-50 relative overflow-hidden">
-          <div className="absolute top-3 left-3 opacity-10"><Trophy className="w-24 h-24 text-orange-700" /></div>
-          <Badge className="bg-orange-600 text-white font-bold mb-3">أفضل قسم</Badge>
+        <Card className="p-6 border-red-200 bg-gradient-to-br from-red-50 to-blue-50 relative overflow-hidden">
+          <div className="absolute top-3 left-3 opacity-10"><Trophy className="w-24 h-24 text-red-700" /></div>
+          <Badge className="bg-gradient-to-l from-blue-700 to-red-700 text-white font-bold mb-3">أفضل قسم</Badge>
           <div className="flex justify-center my-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center border-4 border-orange-300 shadow-lg">
-              <Trophy className="w-10 h-10 text-slate-900" />
-            </div>
+            <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-blue-700 rounded-full flex items-center justify-center shadow-lg"><Trophy className="w-10 h-10 text-white" /></div>
           </div>
-          <p className="text-center font-black text-slate-900 text-lg">{mockHonors.bestDepartment.name}</p>
-          <p className="text-center text-xs text-slate-600 mt-2">{mockHonors.bestDepartment.reason}</p>
+          <p className="text-center font-black text-slate-900 text-lg">الأمن الداخلي</p>
+          <p className="text-center text-xs text-slate-600 mt-2">أعلى نسبة التزام 96%</p>
         </Card>
       </div>
 
-      <Card className="p-6 border-stone-200">
-        <div className="flex items-center gap-2 mb-4">
-          <Medal className="w-5 h-5 text-amber-600" />
-          <h3 className="font-black text-slate-900">المتميزون لهذا الشهر</h3>
-        </div>
+      <Card className="p-6 border-blue-100">
+        <div className="flex items-center gap-2 mb-4"><Medal className="w-5 h-5 text-red-600" /><h3 className="font-black text-slate-900">المتميزون لهذا الشهر</h3></div>
         <div className="space-y-3">
-          {mockHonors.monthly.map((h, i) => (
-            <div key={i} className="flex items-center gap-4 p-4 border border-stone-100 rounded-lg hover:border-amber-200 hover:bg-amber-50/40 transition-all">
-              <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center text-lg font-black text-amber-700 border-2 border-amber-300">{i + 1}</div>
+          {promotions.slice(0, 5).map((p, i) => (
+            <div key={p.id} className="flex items-center gap-4 p-4 border border-blue-50 rounded-lg hover:border-red-200 hover:bg-red-50/30 transition-all">
+              <div className="w-10 h-10 bg-gradient-to-br from-red-100 to-blue-100 rounded-full flex items-center justify-center text-lg font-black text-red-700 border-2 border-red-300">{i + 1}</div>
               <div className="flex-1">
-                <p className="font-bold text-slate-900">{h.name}</p>
-                <p className="text-xs text-slate-600">{h.achievement}</p>
+                <p className="font-bold text-slate-900">{p.name}</p>
+                <p className="text-xs text-slate-600">ترقية إلى {p.toRank} · {p.department}</p>
               </div>
-              <Award className="w-5 h-5 text-amber-600" />
+              <Award className="w-5 h-5 text-red-600" />
             </div>
           ))}
         </div>
