@@ -53,9 +53,7 @@ export default function LoginPage() {
       <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-red-500/30 rounded-full blur-3xl animate-float"></div>
       <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-red-600/25 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s', animationDuration: '5s' }}></div>
       <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-blue-700/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s', animationDuration: '6s' }}></div>
-      {/* Animated stripes */}
-      <div className="absolute top-0 left-0 right-0 h-2 animate-stripe-flow opacity-90"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-2 animate-stripe-flow opacity-90"></div>
+      {/* Floating decorative orbs */}
 
       <div className="w-full max-w-md relative animate-fade-in z-10">
         <div className="text-center mb-6">
