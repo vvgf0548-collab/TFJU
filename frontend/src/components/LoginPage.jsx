@@ -48,34 +48,27 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 naval-bg relative overflow-hidden">
       <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-      {/* Red dominant stripes */}
-      <div className="absolute top-0 left-0 right-0 flex">
-        <div className="h-1.5 flex-1 bg-red-500"></div>
-        <div className="h-1.5 flex-1 bg-red-700"></div>
-        <div className="h-1.5 flex-1 bg-blue-700"></div>
-        <div className="h-1.5 flex-1 bg-red-700"></div>
-        <div className="h-1.5 flex-1 bg-red-500"></div>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 flex">
-        <div className="h-1.5 flex-1 bg-red-500"></div>
-        <div className="h-1.5 flex-1 bg-red-700"></div>
-        <div className="h-1.5 flex-1 bg-blue-700"></div>
-        <div className="h-1.5 flex-1 bg-red-700"></div>
-        <div className="h-1.5 flex-1 bg-red-500"></div>
-      </div>
+      
+      {/* Floating decorative orbs */}
+      <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-red-500/30 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-red-600/25 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s', animationDuration: '5s' }}></div>
+      <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-blue-700/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s', animationDuration: '6s' }}></div>
+      {/* Animated stripes */}
+      <div className="absolute top-0 left-0 right-0 h-2 animate-stripe-flow opacity-90"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-2 animate-stripe-flow opacity-90"></div>
 
       <div className="w-full max-w-md relative animate-fade-in z-10">
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center mb-4">
+          <div className="inline-flex items-center justify-center mb-4 animate-float">
             <div className="relative">
-              <div className="absolute inset-0 bg-red-500/40 rounded-full blur-3xl logo-glow"></div>
+              <div className="absolute inset-0 bg-red-500/50 rounded-full blur-3xl logo-glow pulse-ring"></div>
               <div className="relative w-32 h-32 bg-gradient-to-br from-red-600 via-red-700 to-blue-800 rounded-2xl p-2 shadow-2xl border-2 border-red-400">
                 <img src={LOGO_URL} alt="فريق أمن ملك الطارة" className="w-full h-full object-contain rounded-xl" />
               </div>
             </div>
           </div>
           <h1 className="text-2xl md:text-3xl font-black text-white mb-1 tracking-tight">فريق أمن ملك الطارة</h1>
-          <p className="text-red-300 font-bold text-sm md:text-base tracking-wide">البوابة الإلكترونية الرسمية</p>
+          <p className="text-red-200 font-bold text-sm md:text-base tracking-wide animate-shimmer-text">البوابة الإلكترونية الرسمية</p>
           <div className="flex items-center justify-center gap-2 mt-3">
             <div className="h-px w-12 bg-red-400/50"></div>
             <p className="text-xs text-red-200/90 font-medium">الانضباط أساس القوة</p>

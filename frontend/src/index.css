@@ -70,11 +70,75 @@ code { font-family: source-code-pro, Menlo, Monaco, monospace; }
 }
 
 .naval-bg {
+    background: linear-gradient(135deg, #991b1b 0%, #b91c1c 25%, #7f1d1d 50%, #1e3a8a 75%, #1e40af 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 18s ease infinite;
+    position: relative;
+}
+
+.naval-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
     background: 
-        radial-gradient(ellipse at top right, rgba(220, 38, 38, 0.55), transparent 55%),
-        radial-gradient(ellipse at bottom left, rgba(185, 28, 28, 0.5), transparent 55%),
-        radial-gradient(ellipse at center, rgba(30, 58, 138, 0.4), transparent 70%),
-        linear-gradient(135deg, #7f1d1d 0%, #1e3a8a 35%, #991b1b 70%, #b91c1c 100%);
+        radial-gradient(ellipse 60% 50% at 20% 30%, rgba(220, 38, 38, 0.55), transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 70%, rgba(185, 28, 28, 0.5), transparent 60%),
+        radial-gradient(ellipse 40% 30% at 50% 80%, rgba(30, 64, 175, 0.4), transparent 60%);
+    animation: blobsFloat 20s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes blobsFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(3%, -3%) scale(1.05); }
+    66% { transform: translate(-3%, 3%) scale(0.95); }
+}
+
+@keyframes floatUp {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+.animate-float { animation: floatUp 4s ease-in-out infinite; }
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+.animate-shimmer-text {
+    background: linear-gradient(90deg, #fca5a5 0%, #ffffff 50%, #fca5a5 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+}
+
+@keyframes pulseRing {
+    0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+    70% { box-shadow: 0 0 0 20px rgba(220, 38, 38, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+.pulse-ring { animation: pulseRing 2.5s infinite; }
+
+@keyframes stripeFlow {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+.animate-stripe-flow {
+    background: repeating-linear-gradient(90deg,
+        #dc2626 0px, #dc2626 40px,
+        #7f1d1d 40px, #7f1d1d 80px,
+        #1e40af 80px, #1e40af 120px,
+        #7f1d1d 120px, #7f1d1d 160px
+    );
+    background-size: 200% 100%;
+    animation: stripeFlow 6s linear infinite;
 }
 
 .naval-light {
