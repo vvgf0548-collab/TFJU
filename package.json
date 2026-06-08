@@ -1,0 +1,14 @@
+{
+  "name": "liwa-hamad-security-gate",
+  "version": "1.0.0",
+  "private": true,
+  "description": "بوابة فريق أمن ملك الطارة الإلكترونية",
+  "scripts": {
+    "start": "cd frontend && yarn start",
+    "build": "cd frontend && yarn build",
+    "install": "cd frontend && yarn install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
