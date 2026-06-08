@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "description": "بوابة فريق أمن ملك الطارة الإلكترونية",
+  "workspaces": ["frontend"],
   "scripts": {
-    "start": "cd frontend && yarn start",
-    "build": "cd frontend && yarn build",
-    "install": "cd frontend && yarn install"
+    "start": "yarn workspace frontend start",
+    "build": "yarn workspace frontend build"
   },
   "engines": {
     "node": ">=18.0.0"
