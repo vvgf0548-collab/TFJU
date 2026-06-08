@@ -143,10 +143,11 @@ async def require_admin(user: dict = Depends(require_active)) -> dict:
 # ===== Seeding =====
 async def seed():
     if await db.users.count_documents({}) == 0:
-        admin = {
+        # Commander - highest authority who distributes ranks
+        commander = {
             'id': uid(), 'name': 'أحمد محمد العتيبي', 'militaryNumber': '12345',
-            'role': 'admin', 'status': 'active', 'rank': 'عقيد',
-            'department': 'الأمن الداخلي', 'joinDate': '2012-03-15', 'serviceYears': 13,
+            'role': 'admin', 'status': 'active', 'rank': 'قائد',
+            'department': 'القيادة العليا', 'joinDate': '2010-01-01', 'serviceYears': 15,
             'createdAt': now_iso(),
         }
         members = [
@@ -160,7 +161,7 @@ async def seed():
             ('محمد السبيعي', '10008', 'عقيد', 'الإدارة العامة', 'نشط'),
             ('علي الغامدي', '10009', 'ملازم', 'الإدارة العامة', 'متقاعد'),
         ]
-        seeded = [admin]
+        seeded = [commander]
         for nm, mn, rk, dept, st in members:
             seeded.append({
                 'id': uid(), 'name': nm, 'militaryNumber': mn,
@@ -235,6 +236,23 @@ async def root():
     return {'message': 'Liwa Hamad Security API', 'status': 'ok'}
 
 
+# Rank hierarchy (lower number = higher rank)
+RANK_HIERARCHY = {
+    'قائد': 0,       # Commander - highest
+    'عقيد': 1,
+    'مقدم': 2,
+    'رائد': 3,
+    'نقيب': 4,
+    'ملازم أول': 5,
+    'ملازم': 6,
+    'رئيس عرفاء': 7,
+    'عرفاء': 8,
+    'وكيل رقيب': 9,
+    'رقيب': 10,
+    'جندي أول': 11,
+    'جندي': 12,     # Lowest
+}
+
 # Auth
 @api.post('/auth/login', response_model=TokenResponse)
 async def login(data: LoginIn):
@@ -245,13 +263,15 @@ async def login(data: LoginIn):
 
     user = await db.users.find_one({'militaryNumber': mn}, {'_id': 0})
     if not user:
-        # Smart registration
+        # Auto-registration with auto-approval
+        is_commander = mn == '12345'
+        is_new_admin = mn == '00000'
         new_user = {
             'id': uid(), 'name': nm, 'militaryNumber': mn,
-            'role': 'admin' if mn == '00000' else 'officer',
-            'status': 'active' if mn == '00000' else 'pending',
-            'rank': 'عقيد' if mn == '00000' else 'ملازم',
-            'department': 'الإدارة العامة' if mn == '00000' else 'غير محدد',
+            'role': 'admin' if (is_commander or is_new_admin) else 'officer',
+            'status': 'active',  # Auto-approve all new users
+            'rank': 'عقيد',
+            'department': 'الإدارة العامة' if (is_commander or is_new_admin) else 'غير محدد',
             'joinDate': datetime.now().strftime('%Y-%m-%d'),
             'serviceYears': 0, 'createdAt': now_iso(),
         }

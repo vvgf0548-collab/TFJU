@@ -104,9 +104,16 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 pt-5 border-t border-red-500/40">
-            <p className="text-[11px] text-red-100/90 text-center leading-relaxed">
-              تلميح: الرقم <span className="font-mono font-bold text-red-300">12345</span> لدخول كمسؤول، أو <span className="font-mono font-bold text-red-300">00000</span> لتسجيل مسؤول جديد
-            </p>
+            <div className="text-center">
+              <p className="text-xs text-red-100 mb-3 font-semibold">الرتب العسكرية</p>
+              <div className="flex flex-wrap justify-center gap-1.5 text-[10px]">
+                {['قائد', 'عقيد', 'مقدم', 'رائد', 'نقيب', 'ملازم أول', 'ملازم', 'رئيس عرفاء', 'عرفاء', 'وكيل رقيب', 'رقيب', 'جندي أول', 'جندي'].map((rank, i) => (
+                  <span key={rank} className={`px-2 py-0.5 rounded ${i === 0 ? 'bg-yellow-500/30 text-yellow-200 font-bold' : 'bg-red-800/50 text-red-200'}`}>
+                    {rank}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
